@@ -37,6 +37,25 @@ names_as_labels = False
 if args.label == 'name':
     names_as_labels = True
 
+def popular_categories(files, output_file, min_products):
+    label_map = {}
+    with multiprocessing.Pool() as p:
+        all_labels = tqdm(p.imap(_label_filename, files), total=len(files))
+        with open(output_file, 'w') as output:
+            for label_list in all_labels:
+                for (cat, name) in label_list:
+                    if not (cat in label_map.keys()):
+                        label_map[cat] = []
+                    else:
+                        label_map[cat].append(name)
+    with open(output_file, 'w') as output:
+        for cat in label_map.keys():
+            if len(label_map[cat]) >= min_products:
+                print("popular category ", cat, len(label_map[cat]))    
+                for name in  label_map[cat]:
+                    output.write(f'__label__{cat} {name}\n')
+
+
 def _label_filename(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
