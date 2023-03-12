@@ -31,7 +31,7 @@
         },
         "synonym": {
           "type": "synonym",
-          "synonyms_path": "synonym.csv"
+          "synonyms_path": "synonyms.csv"
         },
         "stemmer": {
           "type": "stemmer",
